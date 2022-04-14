@@ -3,6 +3,7 @@ package com.example.retrofitrx.ui
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.retrofitrx.app
 import com.example.retrofitrx.databinding.ActivityReposBinding
@@ -38,6 +39,11 @@ class ReposActivity : AppCompatActivity() {
     private fun initIncomingEvents() {
         viewModel.repos.observe(this) {
             adapter.setData(it)
+        }
+        viewModel.inProgress.observe(this) { inProgress ->
+            binding.showButton.isEnabled = !inProgress
+            binding.usernameEditText.isEnabled = !inProgress
+            binding.progressBarLayout.isVisible = inProgress
         }
     }
 
