@@ -8,7 +8,9 @@ import com.example.retrofitrx.domain.ProjectsRepo
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.subscribeBy
 
-class ReposViewModel(private val gitProjectRepo: ProjectsRepo) : ViewModel() {
+class ReposViewModel(
+    private val gitProjectRepo: ProjectsRepo
+) : ViewModel() {
     private val _repos = MutableLiveData<List<GitProjectEntity>>()
     val repos: LiveData<List<GitProjectEntity>> = _repos
 
@@ -22,10 +24,15 @@ class ReposViewModel(private val gitProjectRepo: ProjectsRepo) : ViewModel() {
         compositeDisposable.add(
             gitProjectRepo
                 .observeReposForUser(username)
-                .subscribeBy {
-                    _inProgress.postValue(false)
-                    _repos.postValue(it)
-                }
+                .subscribeBy(
+                    onSuccess = {
+                        _inProgress.postValue(false)
+                        _repos.postValue(it)
+                    },
+                    onError = {
+                        // todo
+                    }
+                )
         )
     }
 

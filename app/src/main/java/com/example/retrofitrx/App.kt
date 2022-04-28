@@ -1,13 +1,20 @@
 package com.example.retrofitrx
 
 import android.app.Application
-import android.content.Context
-import com.example.retrofitrx.data.retrofit.RetrofitProjectsRepoImpl
-import com.example.retrofitrx.domain.ProjectsRepo
+import com.example.retrofitrx.di.appModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 
 class App : Application() {
-    val gitProjectsRepo: ProjectsRepo by lazy { RetrofitProjectsRepoImpl() }
-}
 
-val Context.app: App
-    get() = applicationContext as App
+    override fun onCreate() {
+        super.onCreate()
+        startKoin {
+            androidLogger()
+            androidContext(this@App)
+            modules(appModule)
+        }
+    }
+
+}
